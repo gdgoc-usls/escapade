@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useLandingController } from './controllers/useLandingController'
 import { LandingOverlay } from './views/LandingOverlay'
 import { Navbar } from './views/Navbar'
@@ -15,8 +16,9 @@ interface AppProps {
 }
 
 export default function App({ adminLogin = false }: AppProps) {
+  const navigate = useNavigate()
   const controller = useLandingController()
-  const [showLanding, setShowLanding] = useState(true)
+  const [showLanding, setShowLanding] = useState(!adminLogin)
 
   return (
     <div className="min-h-screen bg-[#07090e] text-white flex flex-col font-sans selection:bg-white/30 selection:text-white">
@@ -55,7 +57,7 @@ export default function App({ adminLogin = false }: AppProps) {
       {adminLogin && (
         <AdminLoginModal
           onClose={() => {
-            window.location.href = '/'
+            navigate('/', { replace: true })
           }}
         />
       )}

@@ -9,6 +9,7 @@ interface NavbarProps {
   onToggleMobileMenu: () => void
   onCloseMobileMenu: () => void
   dashboard?: boolean // added this to reuse navbar on admin dashboard
+  onLogout?: () => void
 }
 
 function TypewriterText({
@@ -52,7 +53,8 @@ export function Navbar({
   mobileMenuOpen,
   onToggleMobileMenu,
   onCloseMobileMenu,
-   dashboard = false,
+  dashboard = false,
+  onLogout,
 }: NavbarProps) {
   //to know if its in home or admin dashboard
  const displayedNavSections = dashboard
@@ -123,6 +125,15 @@ export function Navbar({
               </a>
             )
           })}
+          {dashboard && onLogout && (
+            <button
+              type="button"
+              onClick={onLogout}
+              className="rounded-md border border-red-500/30 bg-red-500/10 px-3.5 py-1.5 font-['Orbitron'] text-xs font-bold uppercase tracking-wider text-red-400 transition hover:bg-red-500/20 hover:text-white"
+            >
+              Logout
+            </button>
+          )}
         </nav>
 
 
@@ -161,10 +172,10 @@ export function Navbar({
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#07090e]/95 backdrop-blur-xl border-b border-white/10 px-4 py-6 space-y-4">
-          {navSections.map((link) => (
+          {displayedNavSections.map((link) => (
             <a
               key={link.id}
-              href={link.href}
+              href={dashboard ? '/' : link.href}
               onClick={(e) => {
                 onCloseMobileMenu()
                 handleNavClick(e, link)
@@ -173,9 +184,21 @@ export function Navbar({
                 activeSection === link.id ? 'text-white font-bold' : 'text-white/70'
               }`}
             >
-              {link.name}
+              {dashboard ? '← Back to Website' : link.name}
             </a>
           ))}
+          {dashboard && onLogout && (
+            <button
+              type="button"
+              onClick={() => {
+                onCloseMobileMenu()
+                onLogout()
+              }}
+              className="block w-full text-left font-orbitron text-base uppercase tracking-wider py-2 text-red-400 font-bold"
+            >
+              Logout
+            </button>
+          )}
         </div>
       )}
     </header>

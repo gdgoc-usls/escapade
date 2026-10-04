@@ -85,17 +85,17 @@ const CrewModal = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#010206]/80 px-6 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#010206]/80 p-4 sm:px-6 backdrop-blur-md">
 
-      <div className="relative w-full max-w-md rounded-2xl border border-white/15 bg-[#11151C]/90 p-7 shadow-[0_20px_60px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl">
+      <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-white/15 bg-[#11151C]/90 p-5 sm:p-7 shadow-[0_20px_60px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl">
 
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-5 sm:mb-6 flex items-start justify-between gap-3">
           <div>
-            <h2 className="font-['Orbitron'] text-xl font-bold text-[#FDFDFB]">
+            <h2 className="font-['Orbitron'] text-lg sm:text-xl font-bold text-[#FDFDFB]">
               {crew ? 'Edit Crew' : 'Add Crew'}
             </h2>
 
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="mt-1 text-xs sm:text-sm text-gray-400">
               {crew
                 ? 'Update the crew information.'
                 : 'Add a crew and their escape time.'}
@@ -105,7 +105,7 @@ const CrewModal = ({
           <button
             type="button"
             onClick={onClose}
-            className="text-2xl leading-none text-gray-500 transition hover:text-[#FDFDFB]"
+            className="text-2xl leading-none text-gray-500 transition hover:text-[#FDFDFB] p-1"
             aria-label="Close modal"
           >
             ×
@@ -114,7 +114,7 @@ const CrewModal = ({
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-5"
+          className="space-y-4 sm:space-y-5"
         >
 
           <div>
@@ -127,7 +127,7 @@ const CrewModal = ({
               value={crewName}
               onChange={(e) => setCrewName(e.target.value)}
               placeholder="Enter crew name"
-              className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
+              className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-3.5 py-2.5 sm:px-4 sm:py-3 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
             />
           </div>
 
@@ -136,7 +136,7 @@ const CrewModal = ({
               Escape Time
             </label>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
 
               <div>
                 <input
@@ -145,11 +145,11 @@ const CrewModal = ({
                   step="1"
                   value={minutes}
                   onChange={(e) => setMinutes(e.target.value)}
-                  placeholder="Minutes"
-                  className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
+                  placeholder="0"
+                  className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-2 sm:px-4 py-2.5 sm:py-3 text-center sm:text-left text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
                 />
 
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-center sm:text-left text-[11px] sm:text-xs text-gray-500">
                   Minutes
                 </p>
               </div>
@@ -162,12 +162,12 @@ const CrewModal = ({
                   step="1"
                   value={seconds}
                   onChange={(e) => setSeconds(e.target.value)}
-                  placeholder="Seconds"
-                  className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
+                  placeholder="0"
+                  className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-2 sm:px-4 py-2.5 sm:py-3 text-center sm:text-left text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
                 />
 
-                <p className="mt-1 text-xs text-gray-500">
-                  Seconds (0–59)
+                <p className="mt-1 text-center sm:text-left text-[11px] sm:text-xs text-gray-500">
+                  Seconds
                 </p>
               </div>
 
@@ -179,24 +179,24 @@ const CrewModal = ({
                   step="1"
                   value={milliseconds}
                   onChange={(e) => setMilliseconds(e.target.value)}
-                  placeholder="Milliseconds"
-                  className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
+                  placeholder="0"
+                  className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-2 sm:px-4 py-2.5 sm:py-3 text-center sm:text-left text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
                 />
 
-                <p className="mt-1 text-xs text-gray-500">
-                  Milliseconds (0–99)
+                <p className="mt-1 text-center sm:text-left text-[11px] sm:text-xs text-gray-500">
+                  Millisec
                 </p>
               </div>
 
             </div>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-2.5 sm:gap-3 pt-2">
 
             <button
               type="button"
               onClick={onClose}
-              className="w-full rounded-md border border-white/10 bg-white/5 px-5 py-3 font-['Space_Grotesk'] text-sm text-gray-300 transition hover:border-white/20 hover:bg-white/10 hover:text-[#FDFDFB]"
+              className="w-full rounded-md border border-white/10 bg-white/5 px-4 py-2.5 sm:px-5 sm:py-3 font-['Space_Grotesk'] text-sm text-gray-300 transition hover:border-white/20 hover:bg-white/10 hover:text-[#FDFDFB]"
             >
               Cancel
             </button>
@@ -204,7 +204,7 @@ const CrewModal = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-md bg-[#FDFDFB] px-5 py-3 font-['Space_Grotesk'] text-sm font-semibold text-[#010206] transition hover:bg-[#FFFDEE] disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-md bg-[#FDFDFB] px-4 py-2.5 sm:px-5 sm:py-3 font-['Space_Grotesk'] text-sm font-semibold text-[#010206] transition hover:bg-[#FFFDEE] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? 'Saving...' : 'Save Crew'}
             </button>

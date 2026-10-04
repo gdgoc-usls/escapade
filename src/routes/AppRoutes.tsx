@@ -1,10 +1,11 @@
-import { Routes, Route } from 'react-router-dom' //install react-router-dom (npm install react-router-dom)
+import { Routes, Route } from 'react-router-dom'
 import App from '../App'
 import Dashboard from '../views/Dashboard'
+import ProtectedRoute from './ProtectedRoute'
 
 export default function AppRoutes() {
   return (
-     <Routes>
+    <Routes>
       <Route path="/" element={<App />} />
       <Route path="/admin" element={<App adminLogin />} />
       <Route path="/home" element={<App />} />
@@ -12,7 +13,14 @@ export default function AppRoutes() {
       <Route path="/mission" element={<App />} />
       <Route path="/tickets" element={<App />} />
       <Route path="/leaderboard" element={<App />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   )
 }

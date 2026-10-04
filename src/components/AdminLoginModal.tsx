@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { loginUser } from '../controllers/authController'
 
@@ -14,7 +15,11 @@ const AdminLoginModal = ({ onClose }: AdminLoginModalProps) => {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handleLogin = async () => {
+  const handleLogin = async (e?: FormEvent) => {
+    if (e) {
+      e.preventDefault()
+    }
+
     if (!username.trim() || !password) {
       setError('Please enter your username and password.')
       return
@@ -29,11 +34,12 @@ const AdminLoginModal = ({ onClose }: AdminLoginModalProps) => {
         password,
       })
 
-      navigate('/dashboard')
-    } catch (error) {
+      navigate('/dashboard', { replace: true })
+    } catch (err) {
+      console.error('Login failed:', err)
       setError(
-        error instanceof Error
-          ? error.message
+        err instanceof Error
+          ? err.message
           : 'Unable to login.'
       )
     } finally {
@@ -42,8 +48,8 @@ const AdminLoginModal = ({ onClose }: AdminLoginModalProps) => {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#010206]/80 px-6 backdrop-blur-md">
-      <div className="relative w-full max-w-md rounded-2xl border border-white/15 bg-[#11151C]/90 p-7 shadow-[0_20px_60px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-[#010206]/85 p-4 sm:px-6 backdrop-blur-md">
+      <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-white/15 bg-[#11151C]/95 p-5 sm:p-7 shadow-[0_20px_60px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl">
 
         <button
           type="button"
@@ -54,8 +60,8 @@ const AdminLoginModal = ({ onClose }: AdminLoginModalProps) => {
           ×
         </button>
 
-        <div className="mb-7">
-          <h2 className="font-['Orbitron'] text-xl font-bold text-white">
+        <div className="mb-6 sm:mb-7">
+          <h2 className="font-['Orbitron'] text-lg sm:text-xl font-bold text-white">
             Admin Login
           </h2>
 
@@ -65,53 +71,52 @@ const AdminLoginModal = ({ onClose }: AdminLoginModalProps) => {
         </div>
 
         {error && (
-          <div className="mb-5 rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+          <div className="mb-5 rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 break-words">
             {error}
           </div>
         )}
 
-        <div className="mb-4">
-          <label className="mb-2 block font-['Michroma'] text-xs tracking-wider text-gray-300">
-            Username
-          </label>
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div>
+            <label className="mb-2 block font-['Michroma'] text-xs tracking-wider text-gray-300">
+              Username
+            </label>
 
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter username"
-           className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
-          />
-        </div>
+            <input
+              type="text"
+              autoFocus
+              autoComplete="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter username"
+              className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
+            />
+          </div>
 
-        {/* Password */}
-        <div className="mb-6">
-          <label className="mb-2 block font-['Michroma'] text-xs tracking-wider text-gray-300">
-            Password
-          </label>
+          {/* Password */}
+          <div>
+            <label className="mb-2 block font-['Michroma'] text-xs tracking-wider text-gray-300">
+              Password
+            </label>
 
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleLogin()
-              }
-            }}
-            className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
-          />
-        </div>
+            <input
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
+              className="w-full rounded-md border border-white/10 bg-[#181D25]/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-white/30 focus:bg-[#1D232D]/80 focus:ring-1 focus:ring-white/10"
+            />
+          </div>
 
-        <button
-          type="button"
-          onClick={handleLogin}
-          disabled={loading}
-          className="w-full rounded-md bg-[#FDFDFB] px-5 py-3 font-['Space_Grotesk'] text-sm font-semibold text-[#010206] transition hover:bg-[#FFFDEE] disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-md bg-[#FDFDFB] px-5 py-3 font-['Space_Grotesk'] text-sm font-semibold text-[#010206] transition hover:bg-[#FFFDEE] disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.99]"
+          >
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+        </form>
       </div>
     </div>
   )
