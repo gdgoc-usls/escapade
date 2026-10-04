@@ -6,14 +6,18 @@ import { useParallaxBg } from "../hooks/useParallaxBg";
 import { getCrews } from "../controllers/crewController";
 import type { CrewWithEscapeTime } from "../models/crewModel";
 
-// Helper function to format seconds into HH:MM:SS
+// Helper function to format seconds into HH:MM:SS:MS (Adjusted to accommodate ms if passed as decimals)
 const formatTime = (totalSeconds: number | null) => {
   if (totalSeconds === null) return "--:--:--";
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = Math.floor(totalSeconds % 60);
   
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  // If your database now passes milliseconds as decimals (e.g., 67.45), this catches it.
+  // If it's pre-formatted from the DB, you can adjust this logic.
+  const milliseconds = Math.floor((totalSeconds % 1) * 100); 
+  
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}${totalSeconds % 1 !== 0 ? `:${milliseconds.toString().padStart(2, '0')}` : ''}`;
 };
 
 export function LeaderboardSection() {
@@ -41,23 +45,23 @@ export function LeaderboardSection() {
     fetchLeaderboard();
   }, []);
 
-  // Added centered box-shadows to simulate a subtle glow for all ranks
+  // Scaled down mobile font sizes to fit the added milliseconds perfectly
   const rankStyles = [
     { 
       rank: "1st", 
       textClass: "text-[#FEFA09]",
       iconClass: "bg-[#FEFA09]", 
       paddingClass: "py-3 sm:py-5", 
-      rankSize: "text-2xl sm:text-5xl",
-      crewSize: "text-base sm:text-4xl",
-      timeSize: "text-sm sm:text-2xl",
-      iconSize: "w-4 h-4 sm:w-8 sm:h-8",
+      rankSize: "text-xl sm:text-5xl",
+      crewSize: "text-sm sm:text-4xl",
+      timeSize: "text-[11px] sm:text-2xl",
+      iconSize: "w-3.5 h-3.5 sm:w-8 sm:h-8",
       rowStyle: {
         backgroundColor: "rgba(254, 250, 9, 0.2)", 
         borderColor: "#FEFA09",
         borderWidth: "1px",
         borderStyle: "solid",
-        boxShadow: "0px 0px 20px 0px rgba(254, 250, 9, 0.3)", // Yellow glow
+        boxShadow: "0px 0px 20px 0px rgba(254, 250, 9, 0.3)",
       }
     },
     { 
@@ -65,16 +69,16 @@ export function LeaderboardSection() {
       textClass: "text-white",
       iconClass: "bg-white", 
       paddingClass: "py-2.5 sm:py-4", 
-      rankSize: "text-xl sm:text-4xl",
-      crewSize: "text-sm sm:text-3xl",
-      timeSize: "text-xs sm:text-xl",
-      iconSize: "w-3.5 h-3.5 sm:w-7 sm:h-7",
+      rankSize: "text-lg sm:text-4xl",
+      crewSize: "text-xs sm:text-3xl",
+      timeSize: "text-[10px] sm:text-xl",
+      iconSize: "w-3 h-3 sm:w-7 sm:h-7",
       rowStyle: {
         backgroundColor: "rgba(177, 179, 181, 0.3)", 
         borderColor: "#A0A0A0",
         borderWidth: "1px",
         borderStyle: "solid",
-        boxShadow: "0px 0px 20px 0px rgba(160, 160, 160, 0.3)", // Silver glow
+        boxShadow: "0px 0px 20px 0px rgba(160, 160, 160, 0.3)",
       }
     },
     { 
@@ -82,16 +86,16 @@ export function LeaderboardSection() {
       textClass: "text-[#CD7F32]",
       iconClass: "bg-[#CD7F32]", 
       paddingClass: "py-2 sm:py-3.5", 
-      rankSize: "text-lg sm:text-3xl",
-      crewSize: "text-xs sm:text-2xl",
-      timeSize: "text-[10px] sm:text-lg",
-      iconSize: "w-3 h-3 sm:w-6 sm:h-6",
+      rankSize: "text-base sm:text-3xl",
+      crewSize: "text-[11px] sm:text-2xl",
+      timeSize: "text-[9px] sm:text-lg",
+      iconSize: "w-2.5 h-2.5 sm:w-6 sm:h-6",
       rowStyle: {
         backgroundColor: "rgba(205, 127, 50, 0.2)", 
         borderColor: "#9E7B4F",
         borderWidth: "1px",
         borderStyle: "solid",
-        boxShadow: "0px 0px 20px 0px rgba(205, 127, 50, 0.3)", // Bronze glow
+        boxShadow: "0px 0px 20px 0px rgba(205, 127, 50, 0.3)",
       }
     },
     { 
@@ -99,16 +103,16 @@ export function LeaderboardSection() {
       textClass: "text-[#CEDFFB]",
       iconClass: "bg-[#CEDFFB]", 
       paddingClass: "py-2 sm:py-3", 
-      rankSize: "text-base sm:text-2xl",
+      rankSize: "text-sm sm:text-2xl",
       crewSize: "text-[10px] sm:text-xl",
-      timeSize: "text-[10px] sm:text-base",
-      iconSize: "w-3 h-3 sm:w-5 sm:h-5",
+      timeSize: "text-[8px] sm:text-base",
+      iconSize: "w-2.5 h-2.5 sm:w-5 sm:h-5",
       rowStyle: {
         backgroundColor: "rgba(7, 20, 102, 0.2)", 
         borderColor: "rgba(7, 20, 102, 0.5)",
         borderWidth: "1px",
         borderStyle: "solid",
-        boxShadow: "0px 0px 15px 0px rgba(7, 20, 102, 0.4)", // Blue glow
+        boxShadow: "0px 0px 15px 0px rgba(7, 20, 102, 0.4)",
       }
     },
     { 
@@ -116,16 +120,16 @@ export function LeaderboardSection() {
       textClass: "text-[#CEDFFB]",
       iconClass: "bg-[#CEDFFB]", 
       paddingClass: "py-2 sm:py-3", 
-      rankSize: "text-base sm:text-2xl",
+      rankSize: "text-sm sm:text-2xl",
       crewSize: "text-[10px] sm:text-xl",
-      timeSize: "text-[10px] sm:text-base",
-      iconSize: "w-3 h-3 sm:w-5 sm:h-5",
+      timeSize: "text-[8px] sm:text-base",
+      iconSize: "w-2.5 h-2.5 sm:w-5 sm:h-5",
       rowStyle: {
         backgroundColor: "rgba(7, 20, 102, 0.2)", 
         borderColor: "rgba(7, 20, 102, 0.5)",
         borderWidth: "1px",
         borderStyle: "solid",
-        boxShadow: "0px 0px 15px 0px rgba(7, 20, 102, 0.4)", // Blue glow
+        boxShadow: "0px 0px 15px 0px rgba(7, 20, 102, 0.4)",
       }
     },
   ];
@@ -146,7 +150,7 @@ export function LeaderboardSection() {
       ref={sectionRef}
       id="leaderboard"
       style={{ backgroundImage: `url(${starsBg})` }}
-      className="relative min-h-screen flex flex-col items-center py-24 sm:py-32 px-4 sm:px-8 border-t border-white/10 text-white bg-cover bg-center bg-no-repeat leaderboard-section"
+      className="relative min-h-screen flex flex-col items-center py-24 sm:py-32 px-3 sm:px-8 border-t border-white/10 text-white bg-cover bg-center bg-no-repeat leaderboard-section"
     >
       <style>{`
         @media (min-width: 768px) {
@@ -169,11 +173,14 @@ export function LeaderboardSection() {
             
             {/* Table Headers */}
             <div className="flex items-center justify-between px-4 sm:px-10 pb-2 text-[10px] sm:text-2xl font-orbitron font-bold text-white uppercase tracking-wider">
-              <div className="flex items-center gap-3 sm:gap-8 flex-1">
-                <span className="w-14 sm:w-24 text-left">RANK</span>
-                <span>CREW NAME</span>
+              <div className="flex items-center gap-2 sm:gap-8 flex-1 min-w-0">
+                <span className="w-10 sm:w-24 text-center sm:text-left">RANK</span>
+                {/* Stacked header for mobile to save space */}
+                <span className="text-center sm:text-left leading-tight sm:leading-normal">
+                  CREW<br className="block sm:hidden" /> NAME
+                </span>
               </div>
-              <div className="flex items-center gap-1 sm:gap-3">
+              <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
                 <div 
                   className="w-3 h-3 sm:w-8 sm:h-8 bg-white [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center]" 
                   style={{ 
@@ -195,15 +202,15 @@ export function LeaderboardSection() {
                 <ScrollReveal key={index} delay={`${150 + index * 80}ms`}>
                   <div
                     style={item.rowStyle}
-                    // Added Hover Animation Classes here: hover:scale-[1.02] hover:-translate-y-1 hover:brightness-110 cursor-default duration-300
                     className={`flex items-center justify-between px-4 sm:px-10 gap-2 sm:gap-4 ${item.paddingClass} rounded-2xl sm:rounded-3xl backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 hover:brightness-110 cursor-default`}
                   >
                     {/* Left Side: Rank & Crew Name */}
-                    <div className="flex items-center gap-3 sm:gap-8 flex-1">
-                      <span className={`w-14 sm:w-24 text-left font-orbitron font-bold flex-shrink-0 ${item.rankSize} ${item.textClass}`}>
+                    <div className="flex items-center gap-2 sm:gap-8 flex-1 min-w-0">
+                      <span className={`w-10 sm:w-24 text-center sm:text-left font-orbitron font-bold flex-shrink-0 ${item.rankSize} ${item.textClass}`}>
                         {item.rank}
                       </span>
-                      <span className={`font-orbitron font-medium tracking-wide break-words ${item.crewSize} ${item.textClass}`}>
+                      {/* line-clamp-2 ensures long names safely wrap to 2 lines without pushing the time out */}
+                      <span className={`font-orbitron font-medium tracking-wide break-words line-clamp-2 ${item.crewSize} ${item.textClass}`}>
                         {item.team}
                       </span>
                     </div>
