@@ -18,13 +18,15 @@ interface AppProps {
 export default function App({ adminLogin = false }: AppProps) {
   const navigate = useNavigate()
   const controller = useLandingController()
-  const [showLanding, setShowLanding] = useState(!adminLogin)
+  const [showLanding, setShowLanding] = useState(
+    () => !adminLogin && sessionStorage.getItem('landing_seen') !== 'true',
+  )
 
   return (
     <div className="min-h-screen bg-[#07090e] text-white flex flex-col font-sans selection:bg-white/30 selection:text-white">
       {/* Landing Page Overlay */}
       {showLanding && (
-        <LandingOverlay onEnter={() => setShowLanding(false)} />
+        <LandingOverlay onEnter={() => { sessionStorage.setItem('landing_seen', 'true'); setShowLanding(false) }} />
       )}
       {/* View: Navbar with Tab Typewriter Animation */}
       <Navbar

@@ -8,7 +8,20 @@ interface LandingOverlayProps {
 export function LandingOverlay({ onEnter }: LandingOverlayProps) {
   const [typedButtonText, setTypedButtonText] = useState('')
   const [isExiting, setIsExiting] = useState(false)
+  const [bgLoaded, setBgLoaded] = useState(false)
   const fullButtonText = 'BEGIN MISSION'
+
+  // Preload the background image immediately so it's ready before content fades in
+  useEffect(() => {
+    const img = new Image()
+    img.src = spaceBg3
+    if (img.complete) {
+      setBgLoaded(true)
+    } else {
+      img.onload = () => setBgLoaded(true)
+      img.onerror = () => setBgLoaded(true) // still reveal on error
+    }
+  }, [])
 
   // Typewriter animation for the button text
   useEffect(() => {
@@ -64,9 +77,9 @@ export function LandingOverlay({ onEnter }: LandingOverlayProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center select-none overflow-hidden ${
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center select-none overflow-hidden transition-opacity duration-700 ${
         isExiting ? 'landing-slide-left-exit pointer-events-none' : ''
-      }`}
+      } ${bgLoaded ? 'opacity-100' : 'opacity-0'}`}
       style={{
         backgroundImage: `linear-gradient(180deg, rgba(5,7,12,0.45) 0%, rgba(5,7,12,0.7) 60%, rgba(5,7,12,0.85) 100%), url(${spaceBg3})`,
         backgroundSize: 'cover',
