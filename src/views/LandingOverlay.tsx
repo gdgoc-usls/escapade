@@ -77,11 +77,14 @@ export function LandingOverlay({ onEnter }: LandingOverlayProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center select-none overflow-hidden transition-opacity duration-700 ${
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center select-none overflow-hidden ${
         isExiting ? 'landing-slide-left-exit pointer-events-none' : ''
-      } ${bgLoaded ? 'opacity-100' : 'opacity-0'}`}
+      }`}
       style={{
-        backgroundImage: `linear-gradient(180deg, rgba(5,7,12,0.45) 0%, rgba(5,7,12,0.7) 60%, rgba(5,7,12,0.85) 100%), url(${spaceBg3})`,
+        backgroundColor: '#07090e',
+        backgroundImage: bgLoaded
+          ? `linear-gradient(180deg, rgba(5,7,12,0.45) 0%, rgba(5,7,12,0.7) 60%, rgba(5,7,12,0.85) 100%), url(${spaceBg3})`
+          : undefined,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
