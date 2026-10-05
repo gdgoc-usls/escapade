@@ -231,19 +231,19 @@ const Dashboard = () => {
         <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-white/10 pb-4">
           <div>
             <h1 className="font-['Orbitron'] text-xl sm:text-2xl font-bold tracking-wide text-white">
-              Admin Console
+              Admin Dashboard
             </h1>
             <p className="mt-0.5 font-['Space_Grotesk'] text-xs sm:text-sm text-gray-400">
               Signed in as <span className="font-semibold text-[#FDFDFB]">{adminUser?.user_name || 'Admin'}</span>
             </p>
           </div>
-          <button
+          {/* <button
             type="button"
             onClick={handleLogout}
             className="self-start sm:self-auto inline-flex items-center gap-1.5 rounded-md border border-red-500/30 bg-red-500/10 px-3.5 py-1.5 font-['Michroma'] text-xs tracking-wider text-red-400 transition hover:bg-red-500/20 hover:text-white"
           >
             LOGOUT
-          </button>
+          </button> */}
         </div>
 
         {error && (

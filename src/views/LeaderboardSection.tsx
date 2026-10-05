@@ -6,18 +6,22 @@ import { useParallaxBg } from "../hooks/useParallaxBg";
 import { getCrews } from "../controllers/crewController";
 import type { CrewWithEscapeTime } from "../models/crewModel";
 
-// Helper function to format seconds into HH:MM:SS:MS (Adjusted to accommodate ms if passed as decimals)
 const formatTime = (totalSeconds: number | null) => {
-  if (totalSeconds === null) return "--:--:--";
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = Math.floor(totalSeconds % 60);
-  
-  // If your database now passes milliseconds as decimals (e.g., 67.45), this catches it.
-  // If it's pre-formatted from the DB, you can adjust this logic.
-  const milliseconds = Math.floor((totalSeconds % 1) * 100); 
-  
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}${totalSeconds % 1 !== 0 ? `:${milliseconds.toString().padStart(2, '0')}` : ''}`;
+ if (totalSeconds === null) {
+      return '—'
+    }
+
+    const minutes = Math.floor(totalSeconds / 60000)
+
+    const seconds = Math.floor(
+      (totalSeconds % 60000) / 1000
+    )
+
+    const milliseconds = Math.floor(
+      (totalSeconds % 1000) / 10
+    )
+
+    return `${minutes}m ${String(seconds).padStart(2, '0')}s ${String(milliseconds).padStart(2, '0')}ms`
 };
 
 export function LeaderboardSection() {
@@ -29,7 +33,6 @@ export function LeaderboardSection() {
       try {
         const data = await getCrews();
         
-        // Filter out crews that don't have an escape time yet, then sort by fastest time
         const validCrews = data
           .filter((crew) => crew.escape_time !== null)
           .sort((a, b) => (a.escape_time as number) - (b.escape_time as number));
@@ -45,7 +48,6 @@ export function LeaderboardSection() {
     fetchLeaderboard();
   }, []);
 
-  // Scaled down mobile font sizes to fit the added milliseconds perfectly
   const rankStyles = [
     { 
       rank: "1st", 

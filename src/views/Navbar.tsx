@@ -128,8 +128,11 @@ export function Navbar({
           {dashboard && onLogout && (
             <button
               type="button"
-              onClick={onLogout}
-              className="rounded-md border border-red-500/30 bg-red-500/10 px-3.5 py-1.5 font-['Orbitron'] text-xs font-bold uppercase tracking-wider text-red-400 transition hover:bg-red-500/20 hover:text-white"
+              onClick={() => {
+                onCloseMobileMenu()
+                onLogout()
+              }}
+              className="block w-full text-left font-orbitron text-base uppercase tracking-wider py-2 text-white/70 font-bold transition-colors duration-300 hover:text-red-400 hover:opacity-100"
             >
               Logout
             </button>
@@ -194,7 +197,7 @@ export function Navbar({
                 onCloseMobileMenu()
                 onLogout()
               }}
-              className="block w-full text-left font-orbitron text-base uppercase tracking-wider py-2 text-red-400 font-bold"
+              className="block w-full text-left font-orbitron text-base uppercase tracking-wider py-2 text-white/70 font-bold transition-colors duration-300 hover:text-red-400 hover:opacity-100"
             >
               Logout
             </button>
